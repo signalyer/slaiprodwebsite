@@ -1,0 +1,15 @@
+name = "signallayer-contact-api"
+main = "workers/contact-api/index.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Secrets (set via CLI, never in this file):
+#   wrangler secret put TURNSTILE_SECRET
+#   wrangler secret put RESEND_API_KEY
+#   wrangler secret put CONTACT_EMAIL
+
+[env.production]
+name = "signallayer-contact-api"
+
+[env.staging]
+name = "signallayer-contact-api-staging"
