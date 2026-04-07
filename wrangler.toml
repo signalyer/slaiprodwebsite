@@ -5,8 +5,9 @@ compatibility_flags = ["nodejs_compat"]
 
 # Secrets (set via CLI, never in this file):
 #   wrangler secret put TURNSTILE_SECRET
-#   wrangler secret put RESEND_API_KEY
-#   wrangler secret put CONTACT_EMAIL
+#   wrangler secret put GRAPH_TENANT_ID
+#   wrangler secret put GRAPH_CLIENT_ID
+#   wrangler secret put GRAPH_CLIENT_SECRET
 
 [env.production]
 name = "signallayer-contact-api"
