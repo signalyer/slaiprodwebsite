@@ -1,6 +1,7 @@
 {
   "navigationFallback": {
-    "rewrite": "/index.html"
+    "rewrite": "/index.html",
+    "exclude": ["*.html", "/api/*"]
   },
   "responseOverrides": {
     "404": {

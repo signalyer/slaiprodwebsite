@@ -17,6 +17,7 @@ const Header = () => {
     { href: "#features", label: "Platform", id: "features" },
     { href: "#approach", label: "Methodology", id: "approach" },
     { href: "#agentic", label: "Agentic AI", id: "agentic" },
+    { href: "/blog.html", label: "Blog", id: "blog", external: true },
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
@@ -77,12 +78,15 @@ const Header = () => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
-                const isActive = isHome && activeSection === link.id;
+                const isExternal = (link as any).external;
+                const isActive = !isExternal && isHome && activeSection === link.id;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
+                    {...(isExternal ? { target: "_self" } : {})}
                     onClick={(e) => {
+                      if (isExternal) return; // let browser navigate normally
                       if (!isHome) {
                         e.preventDefault();
                         handleNavClick(link);
@@ -148,26 +152,30 @@ const Header = () => {
                 exit={{ opacity: 0, height: 0 }}
                 transition={{ duration: 0.25, ease: "easeInOut" }}
               >
-                {navLinks.map((link, index) => (
-                  <motion.a
-                    key={link.href}
-                    href={link.href}
-                    onClick={(e) => {
-                      if (!isHome) { e.preventDefault(); handleNavClick(link); }
-                      else setIsMenuOpen(false);
-                    }}
-                    className={`py-2.5 px-4 rounded-xl transition-colors font-medium text-sm cursor-pointer ${
-                      isHome && activeSection === link.id
-                        ? "text-primary bg-primary/10"
-                        : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
-                    }`}
-                    initial={{ opacity: 0, x: -16 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ duration: 0.25, delay: index * 0.04 }}
-                  >
-                    {link.label}
-                  </motion.a>
-                ))}
+                {navLinks.map((link, index) => {
+                  const isExternal = (link as any).external;
+                  return (
+                    <motion.a
+                      key={link.href}
+                      href={link.href}
+                      onClick={(e) => {
+                        if (isExternal) { setIsMenuOpen(false); return; }
+                        if (!isHome) { e.preventDefault(); handleNavClick(link); }
+                        else setIsMenuOpen(false);
+                      }}
+                      className={`py-2.5 px-4 rounded-xl transition-colors font-medium text-sm cursor-pointer ${
+                        !isExternal && isHome && activeSection === link.id
+                          ? "text-primary bg-primary/10"
+                          : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                      }`}
+                      initial={{ opacity: 0, x: -16 }}
+                      animate={{ opacity: 1, x: 0 }}
+                      transition={{ duration: 0.25, delay: index * 0.04 }}
+                    >
+                      {link.label}
+                    </motion.a>
+                  );
+                })}
                 <motion.div
                   initial={{ opacity: 0, x: -16 }}
                   animate={{ opacity: 1, x: 0 }}

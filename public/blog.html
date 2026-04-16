@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentic Implementation Journey — Technical Deep Dive</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;background:#f0f2f5;color:#1a1a2e;padding:0}
+.container{max-width:1100px;margin:0 auto;padding:20px}
+.blog-hero{background:linear-gradient(135deg,#1e293b 0%,#334155 100%);color:#fff;padding:32px 20px;text-align:center;border-radius:12px;margin-bottom:16px}
+.blog-hero h1{font-size:1.5rem;max-width:800px;margin:0 auto 6px;line-height:1.3;color:#fff}
+.blog-hero .subtitle{font-size:.84rem;color:#94a3b8;max-width:600px;margin:0 auto}
+.blog-hero .meta{font-size:.7rem;color:#64748b;margin-top:10px}
+.metric-row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.metric-card{flex:1;min-width:120px;background:#fff;border:1px solid #e2e8f0;border-radius:10px;padding:14px;text-align:center;box-shadow:0 1px 3px rgba(0,0,0,.06)}
+.metric-card .mv{font-size:1.5rem;font-weight:800;color:#1e293b}
+.metric-card .ml{font-size:.6rem;color:#64748b;text-transform:uppercase;letter-spacing:.5px;margin-top:2px}
+.metric-card.green .mv{color:#059669}.metric-card.blue .mv{color:#3b82f6}.metric-card.amber .mv{color:#d97706}.metric-card.red .mv{color:#dc2626}
+/* Tabs */
+.tab-bar{display:flex;gap:0;border-bottom:2px solid #e5e7eb;margin-bottom:16px;overflow-x:auto}
+.tab-btn{padding:10px 18px;font-size:.8rem;font-weight:500;color:#888;background:none;border:none;border-bottom:3px solid transparent;margin-bottom:-2px;cursor:pointer;transition:all .15s;white-space:nowrap}
+.tab-btn:hover{color:#3b82f6}.tab-btn.active{color:#3b82f6;font-weight:700;border-bottom-color:#3b82f6}
+.tab-content{display:none}.tab-content.active{display:block}
+/* Content */
+.blog-body{max-width:860px;margin:0 auto}
+.blog-body h2{font-size:1.1rem;color:#1e293b;margin:20px 0 10px}
+.blog-body h3{font-size:.92rem;color:#334155;margin:16px 0 8px}
+.blog-body p{font-size:.82rem;line-height:1.7;color:#374151;margin-bottom:12px}
+.blog-body ul,.blog-body ol{font-size:.82rem;line-height:1.7;color:#374151;margin:0 0 12px 20px}
+.blog-body li{margin-bottom:4px}
+.insight-box{background:#eff6ff;border-left:4px solid #3b82f6;padding:12px 16px;border-radius:0 8px 8px 0;margin:14px 0;font-size:.8rem;line-height:1.6}
+.insight-box.warn{background:#fef3c7;border-left-color:#d97706}
+.insight-box.green{background:#f0fdf4;border-left-color:#059669}
+.diagram{background:#1e293b;color:#cbd5e1;font-family:Consolas,Monaco,monospace;font-size:.65rem;line-height:1.5;padding:14px 18px;border-radius:8px;overflow-x:auto;margin:14px 0;white-space:pre}
+.comparison-table{width:100%;border-collapse:collapse;font-size:.76rem;margin:12px 0}
+.comparison-table th{background:#f8fafc;padding:7px 10px;text-align:left;font-size:.66rem;text-transform:uppercase;color:#64748b;border-bottom:2px solid #e5e7eb}
+.comparison-table td{padding:7px 10px;border-bottom:1px solid #f3f4f6}
+.comparison-table tr:hover{background:#f8fafc}
+.badge{display:inline-block;font-size:.62rem;font-weight:700;padding:2px 8px;border-radius:4px}
+.badge.pass{background:#d1fae5;color:#065f46}.badge.fail{background:#fee2e2;color:#991b1b}.badge.warn{background:#fef3c7;color:#92400e}
+.journey-step{display:flex;align-items:center;gap:10px;margin:8px 0}
+.journey-dot{width:32px;height:32px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.7rem;color:#fff;flex-shrink:0}
+.journey-body .jt{font-weight:700;font-size:.8rem;color:#1e293b}
+.journey-body .jd{font-size:.74rem;color:#64748b;margin-top:1px}
+.token-bar{display:flex;height:22px;border-radius:6px;overflow:hidden;margin:8px 0}
+.token-bar .seg{display:flex;align-items:center;justify-content:center;font-size:.58rem;font-weight:700;color:#fff}
+.footer-cta{background:#f8fafc;border-radius:10px;padding:20px;text-align:center;margin:20px 0;border:1px solid #e2e8f0}
+.footer-cta h3{font-size:.95rem;color:#1e293b;margin-bottom:4px}
+.footer-cta p{font-size:.78rem;color:#64748b}
+</style>
+</head>
+<body>
+<div class="container">
+
+<div class="blog-hero">
+  <h1>Agentic Implementation Journey: Building a Multi-Agent Compliance Review System</h1>
+  <div class="subtitle">A practitioner's guide to eval-driven development, adversarial testing, and prompt engineering for high-stakes AI agents.</div>
+  <div class="meta">Technical Deep Dive &middot; For AI/ML Engineers</div>
+</div>
+
+<div class="metric-row">
+  <div class="metric-card green"><div class="mv">97%+</div><div class="ml">Accuracy (3 gates at 100%)</div></div>
+  <div class="metric-card blue"><div class="mv">$0.02</div><div class="ml">Per 5-Gate Decision</div></div>
+  <div class="metric-card amber"><div class="mv">50x</div><div class="ml">Cost Savings Found</div></div>
+  <div class="metric-card"><div class="mv">13M</div><div class="ml">Tokens Processed</div></div>
+  <div class="metric-card green"><div class="mv">$21</div><div class="ml">Total Eval Cost</div></div>
+</div>
+
+<div class="tab-bar">
+  <button class="tab-btn active" onclick="switchTab('problem')">Problem & Architecture</button>
+  <button class="tab-btn" onclick="switchTab('eval')">Eval Strategy</button>
+  <button class="tab-btn" onclick="switchTab('prompts')">Prompt Engineering</button>
+  <button class="tab-btn" onclick="switchTab('safety')">Adversarial & Safety</button>
+  <button class="tab-btn" onclick="switchTab('models')">Cross-Model & Debugger</button>
+  <button class="tab-btn" onclick="switchTab('summary')">Summary</button>
+</div>
+
+<div class="blog-body">
+
+<!-- TAB: Problem & Architecture -->
+<div class="tab-content active" id="tab-problem">
+<h2>The Problem</h2>
+<p>Regulatory compliance review is a sequential decision process. An applicant's submission must pass through five independent checks before approval. Each check queries an external data source, interprets results against complex rules, and produces a reasoned decision.</p>
+<p>The manual process takes 3-5 business days per case. The goal: an AI agent system that matches human analyst decisions in 30 seconds with auditable reasoning. Not replacing the human — producing a recommendation they review in minutes instead of days.</p>
+<div class="insight-box">Regulated industries have zero tolerance for silent failures. A wrong denial means someone loses access to services. The system must know when it's uncertain and escalate rather than guess.</div>
+
+<h2>Architecture: Deterministic + Agentic</h2>
+<div class="diagram">                        APPLICATION SUBMITTED
+                                 |
+                                 v
+                 +-------------------------------+
+                 |   DETERMINISTIC VALIDATION     |
+                 |   No AI - pure rules, &lt;2ms     |
+                 +-------+---------------+-------+
+                         |               |
+                     Valid               Invalid
+                         |               |
+                         v               v
+                 +---------------+   Return for
+                 | AGENT PIPELINE|   Correction
+                 +-------+-------+
+                         |
+     +-------+-------+--+--+-------+-------+
+     v       v       v     v       v
+   Gate 1  Gate 2  Gate 3  Gate 4  Gate 5
+   Status  Criteria Risk   Location Conflict
+     |       |       |       |       |
+     +---+---+---+---+---+---+---+---+
+         v               v
+   External Data    DECISION
+   (Tool Use)       PASS | FAIL | ESCALATE</div>
+
+<p><strong>Phase 1 (Validation)</strong> — deterministic Python. 160 lines, &lt;2ms, 62 tests. No LLM needed for questions with one right answer.</p>
+<p><strong>Phase 2 (Compliance Review)</strong> — five specialist agents:</p>
+<table class="comparison-table">
+<tr><th>Gate</th><th>Responsibility</th><th>External Data</th><th>Difficulty</th></tr>
+<tr><td><strong>Gate 1</strong></td><td>Status verification</td><td>System A</td><td><span class="badge pass">Standard</span></td></tr>
+<tr><td><strong>Gate 2</strong></td><td>Criteria qualification</td><td>System B</td><td><span class="badge pass">Standard</span></td></tr>
+<tr><td><strong>Gate 3</strong></td><td>Risk assessment scoring</td><td>System B</td><td><span class="badge fail">Hardest</span></td></tr>
+<tr><td><strong>Gate 4</strong></td><td>Location compliance</td><td>System C</td><td><span class="badge pass">Standard</span></td></tr>
+<tr><td><strong>Gate 5</strong></td><td>Rule conflict detection</td><td>System A</td><td><span class="badge pass">Standard</span></td></tr>
+</table>
+<ul>
+  <li><strong>Specialist over generalist.</strong> Five focused agents. No attention dilution.</li>
+  <li><strong>Sequential with early exit.</strong> FAIL &ge; 0.80 confidence skips remaining gates.</li>
+  <li><strong>Safe defaults.</strong> Any failure &rarr; ESCALATE with confidence 0.0. Never auto-deny.</li>
+  <li><strong>Compliance from day 1.</strong> Immutable audit trail, encryption, access logging.</li>
+</ul>
+</div>
+
+<!-- TAB: Eval Strategy -->
+<div class="tab-content" id="tab-eval">
+<h2>Simulation as Answer Key</h2>
+<p>Instead of JSON test files, we built a complete deterministic implementation of all five gates in pure Python. Same tools, same data, same decision space. This serves as both the demo engine and the eval answer key.</p>
+<table class="comparison-table">
+<tr><th></th><th>JSON Test Files</th><th>Deterministic Simulation</th></tr>
+<tr><td>New scenarios</td><td>Must add manually</td><td>Handles any input automatically</td></tr>
+<tr><td>Edge cases</td><td>Only cases you wrote</td><td>Catches rule interaction bugs</td></tr>
+<tr><td>Powers demo</td><td>No</td><td>Yes</td></tr>
+<tr><td>Stays in sync</td><td>Can drift</td><td>IS the rules</td></tr>
+</table>
+
+<h2>16 Eval Types, 219 Scenarios</h2>
+<div class="metric-row">
+  <div class="metric-card blue"><div class="mv">16</div><div class="ml">Eval Types</div></div>
+  <div class="metric-card blue"><div class="mv">219</div><div class="ml">Scenarios</div></div>
+  <div class="metric-card blue"><div class="mv">173</div><div class="ml">Runs Completed</div></div>
+  <div class="metric-card blue"><div class="mv">6,500+</div><div class="ml">Test Cases</div></div>
+</div>
+<div class="diagram">  EVAL COVERAGE MATRIX
+  =====================================================================
+  ACCURACY             SAFETY              REGRESSION
+  - Single gate (30)   - Prompt injection   - Golden cases (30)
+  - All gates (150)    - Boundary values    - Consistency (5x repeat)
+  - Full pipeline (12) - Missing data
+                        - Contradictory
+
+  MODEL & COST         REASONING QUALITY
+  - Cross-model (5)    - Hallucination detection
+  - Latency tracking   - Faithfulness analysis
+  - Cost per gate      - Sensitive data leakage</div>
+</div>
+
+<!-- TAB: Prompt Engineering -->
+<div class="tab-content" id="tab-prompts">
+<h2>The Journey: 70% &rarr; 100%</h2>
+<div class="journey-step"><div class="journey-dot" style="background:#dc2626">v1</div><div class="journey-body"><div class="jt">Baseline: 70-90% by gate</div><div class="jd">First prompts. Gate 3 at 70% — agent does arithmetic wrong.</div></div></div>
+<div class="journey-step"><div class="journey-dot" style="background:#d97706">v2</div><div class="journey-body"><div class="jt">Pre-computation: 87-97%</div><div class="jd">Moved arithmetic into Python. <strong>+27 points on hardest gate.</strong></div></div></div>
+<div class="journey-step"><div class="journey-dot" style="background:#059669">v3</div><div class="journey-body"><div class="jt">Decision tables: 97-100%</div><div class="jd">Replaced prose with structured grids. Eliminated remaining mismatches.</div></div></div>
+<div class="journey-step"><div class="journey-dot" style="background:#047857">v5</div><div class="journey-body"><div class="jt">Final: 97%+ overall (3 gates at 100%)</div><div class="jd">Confidence calibration, scope containment, edge cases. Gates 3-5 at 100%.</div></div></div>
+
+<div class="insight-box green"><strong>The 27-Point Pattern:</strong> Stop asking AI to do math. Pre-compute dates, ages, thresholds. Pass results as labels. This single change outweighed all other improvements combined.</div>
+
+<h2>Token Savings from Prompt Format (Gate 3)</h2>
+<table class="comparison-table">
+<tr><th>Format</th><th>Accuracy</th><th>Avg Tokens</th><th>vs Baseline</th></tr>
+<tr><td>Bullets (v1)</td><td>90%</td><td>3,284</td><td>baseline</td></tr>
+<tr><td>Prose</td><td>93%</td><td>2,799</td><td>-15%</td></tr>
+<tr><td>Table</td><td><strong>100%</strong></td><td>2,375</td><td><strong>-28%</strong></td></tr>
+<tr><td>Minimal table</td><td>97%</td><td>2,264</td><td>-31%</td></tr>
+<tr><td>Pre-computed</td><td><strong>100%</strong></td><td>1,668</td><td><strong>-49%</strong></td></tr>
+</table>
+<div class="insight-box">The best prompt is shorter AND more accurate. Verbosity &ne; quality. Structure beats volume.</div>
+
+<h2>5 Reusable Patterns</h2>
+<ol>
+  <li><strong>Pre-compute deterministic values.</strong> Never ask an LLM to calculate.</li>
+  <li><strong>Decision tables over prose.</strong> Grids eliminate branching ambiguity.</li>
+  <li><strong>Explicit scope boundaries.</strong> Tell the agent what NOT to do.</li>
+  <li><strong>Escalation bias direction.</strong> "When in doubt, ESCALATE rather than FAIL."</li>
+  <li><strong>Confidence guidelines with numeric ranges.</strong> Makes confidence actionable.</li>
+</ol>
+
+<h2>Token Economics</h2>
+<div style="font-size:.72rem;color:#64748b;margin-bottom:4px">Token breakdown across 13M total</div>
+<div class="token-bar">
+  <div class="seg" style="width:93%;background:#3b82f6">93% Input (prompts + tool data)</div>
+  <div class="seg" style="width:7%;background:#8b5cf6">7% Output</div>
+</div>
+<div style="font-size:.72rem;color:#64748b;margin-top:4px">Prompt optimization targets the 93%. Compressing instructions saves far more than shortening reasoning.</div>
+</div>
+
+<!-- TAB: Adversarial & Safety -->
+<div class="tab-content" id="tab-safety">
+<h2>Adversarial Testing</h2>
+<p>Agentic AI faces a specific threat: <strong>indirect prompt injection via tool responses</strong>. The agent reads data from external systems via tool calls. That data is the attack surface.</p>
+<table class="comparison-table">
+<tr><th>Attack Category</th><th>Risk</th><th>Tests</th><th>Status</th></tr>
+<tr><td><strong>Prompt Injection</strong> — malicious instructions in tool responses</td><td><span class="badge fail">Critical</span></td><td>10</td><td><span class="badge pass">Defended</span></td></tr>
+<tr><td><strong>Boundary Values</strong> — scores at exact thresholds</td><td><span class="badge warn">High</span></td><td>12</td><td><span class="badge warn">9/12</span></td></tr>
+<tr><td><strong>Missing Data</strong> — null/empty from external systems</td><td><span class="badge warn">Medium</span></td><td>5</td><td><span class="badge warn">4/5</span></td></tr>
+<tr><td><strong>Contradictory Data</strong> — inconsistent responses</td><td><span class="badge warn">Medium</span></td><td>4</td><td><span class="badge warn">3/4</span></td></tr>
+</table>
+
+<h2>Reasoning Quality Analysis</h2>
+<div class="metric-row">
+  <div class="metric-card amber"><div class="mv">6</div><div class="ml">Hallucinations Flagged</div></div>
+  <div class="metric-card green"><div class="mv">90%</div><div class="ml">Faithfulness Rate</div></div>
+  <div class="metric-card red"><div class="mv">24</div><div class="ml">Data Leakage Flagged</div></div>
+</div>
+<p>Beyond decisions, we scan reasoning for fabricated values, logic inconsistencies, and sensitive data in logged output.</p>
+</div>
+
+<!-- TAB: Cross-Model & Debugger -->
+<div class="tab-content" id="tab-models">
+<h2>Cross-Model Comparison</h2>
+<p>Same prompts. Same tools. Same 219 scenarios. Different model. Different price.</p>
+<table class="comparison-table">
+<tr><th>Model Tier</th><th>Accuracy</th><th>Cost/Case</th><th>Relative Cost</th><th>Tokens/Case</th></tr>
+<tr><td>Premium (Tier 3)</td><td>89%</td><td>$0.00800</td><td>50x</td><td>2,199</td></tr>
+<tr><td>Mid-tier (Tier 2)</td><td><strong>97%</strong></td><td>$0.00249</td><td>16x</td><td>2,547</td></tr>
+<tr><td>Budget (Tier 1)</td><td>59%</td><td><strong>$0.00016</strong></td><td><strong>1x</strong></td><td>967</td></tr>
+</table>
+<div class="insight-box green"><strong>Key finding:</strong> Mid-tier model achieved highest accuracy (97%) at 3x less than premium. Budget model is 50x cheaper but needs prompt tuning for this domain. Good prompts transfer across tiers — the mid-tier sweet spot delivers best accuracy-to-cost ratio.</div>
+
+<h2>Model Behavior Debugger</h2>
+<p>AI providers update models without notice. The debugger detects behavioral changes before they reach users.</p>
+<div class="metric-row">
+  <div class="metric-card"><div class="mv">Snapshot</div><div class="ml">Baseline behavior</div></div>
+  <div class="metric-card"><div class="mv">Diff</div><div class="ml">Compare versions</div></div>
+  <div class="metric-card"><div class="mv">Regression</div><div class="ml">One-command PASS/FAIL</div></div>
+  <div class="metric-card"><div class="mv">Safety</div><div class="ml">Cross-provider comparison</div></div>
+</div>
+<p>Workflow: snapshot current behavior &rarr; new model version released &rarr; run diff &rarr; get per-gate regression report before deploying.</p>
+<p>Safety comparison runs the full suite (gates + adversarial + regression) across models, producing a composite score weighted: gate accuracy (40%), adversarial robustness (40%), regression stability (20%).</p>
+
+<h2>Infrastructure</h2>
+<p><strong>DB as single source of truth.</strong> Eliminated all file I/O. 125 blob files = 15-25s. DB query = &lt;50ms. Full JSON in <code>run_data</code> column.</p>
+<p><strong>Cloud deployment.</strong> App service (4 workers), static web app CDN, key vault. Four live dashboards backed by database queries.</p>
+</div>
+
+<!-- TAB: Summary -->
+<div class="tab-content" id="tab-summary">
+<table class="comparison-table">
+<tr><th>Metric</th><th>Value</th></tr>
+<tr><td>Eval types</td><td><strong>16</strong></td></tr>
+<tr><td>Test scenarios</td><td><strong>219</strong></td></tr>
+<tr><td>Total eval runs</td><td><strong>173</strong></td></tr>
+<tr><td>Individual test cases</td><td><strong>6,500+</strong></td></tr>
+<tr><td>API endpoints</td><td><strong>77</strong></td></tr>
+<tr><td>Prompt versions</td><td><strong>5 per gate (25 total)</strong></td></tr>
+<tr><td>Final accuracy</td><td><strong>97%+ overall (3 gates at 100%, Gate 1 at 98%, Gate 2 at 87%)</strong></td></tr>
+<tr><td>Cost per 5-gate decision</td><td><strong>~$0.02</strong></td></tr>
+<tr><td>Total eval cost</td><td><strong>~$21</strong></td></tr>
+<tr><td>Models tested</td><td><strong>5 (2 providers)</strong></td></tr>
+<tr><td>Safety issues found</td><td><strong>12 fixed, 4 open, 5 pending</strong></td></tr>
+</table>
+<div class="footer-cta">
+  <h3>The agent is 10% of the work. The eval infrastructure is 90%.</h3>
+  <p>That ratio is correct for regulated industries — and probably correct for any high-stakes AI system.</p>
+</div>
+</div>
+
+</div><!-- blog-body -->
+</div><!-- container -->
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab-btn').forEach(function(b){b.classList.remove('active')});
+  document.querySelectorAll('.tab-content').forEach(function(t){t.classList.remove('active')});
+  document.getElementById('tab-'+id).classList.add('active');
+  event.target.classList.add('active');
+  window.scrollTo(0,document.querySelector('.tab-bar').offsetTop-10);
+}
+</script>
+</body>
+</html>
