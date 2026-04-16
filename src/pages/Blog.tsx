@@ -129,7 +129,7 @@ const Blog = () => {
     <div className="min-h-screen bg-background">
       <Helmet>
         <title>Agentic Implementation Journey | Signal Layer</title>
-        <meta name="description" content="A practitioner's guide to eval-driven development, adversarial testing, and prompt engineering for high-stakes AI agents." />
+        <meta name="description" content="A practitioner's guide to eval-driven dev, adversarial testing and prompt engineering for high-stakes AI agents." />
       </Helmet>
       <CursorGlow />
       <Header />
@@ -141,10 +141,10 @@ const Blog = () => {
             <span className="text-primary font-medium text-sm uppercase tracking-wider mb-4 block">Technical Deep Dive</span>
             <h1 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-5 leading-tight max-w-3xl mx-auto">
               Agentic Implementation Journey:{" "}
-              <span className="gradient-text">Building a Multi-Agent Compliance Review System</span>
+              <span className="gradient-text">Building a Multi-Agent Compliance System</span>
             </h1>
             <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
-              A practitioner's guide to eval-driven development, adversarial testing, and prompt engineering for high-stakes AI agents.
+              A practitioner's guide to eval-driven dev, adversarial testing and prompt engineering for high-stakes AI agents.
             </p>
           </motion.div>
 
