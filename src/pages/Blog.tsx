@@ -140,7 +140,6 @@ const Blog = () => {
           <motion.div className="text-center mb-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
             <span className="text-primary font-medium text-sm uppercase tracking-wider mb-2 block">Technical Deep Dive</span>
             <h1 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight max-w-3xl mx-auto">
-              Agentic Implementation Journey:{" "}
               <span className="gradient-text">Building a Multi-Agent Compliance System</span>
             </h1>
             <p className="text-muted-foreground text-base max-w-2xl mx-auto leading-relaxed">
