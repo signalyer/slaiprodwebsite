@@ -17,7 +17,7 @@ const Header = () => {
     { href: "#features", label: "Platform", id: "features" },
     { href: "#approach", label: "Methodology", id: "approach" },
     { href: "#agentic", label: "Agentic AI", id: "agentic" },
-    { href: "/blog.html", label: "Blog", id: "blog", external: true },
+    { href: "/blog", label: "Blog", id: "blog", route: true },
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
@@ -78,28 +78,32 @@ const Header = () => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
-                const isExternal = (link as any).external;
-                const isActive = !isExternal && isHome && activeSection === link.id;
+                const isRoute = (link as any).route;
+                const isRouteActive = isRoute && location.pathname === link.href;
+                const isActive = !isRoute && isHome && activeSection === link.id;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
-                    {...(isExternal ? { target: "_self" } : {})}
                     onClick={(e) => {
-                      if (isExternal) return; // let browser navigate normally
+                      if (isRoute) {
+                        e.preventDefault();
+                        navigate(link.href);
+                        return;
+                      }
                       if (!isHome) {
                         e.preventDefault();
                         handleNavClick(link);
                       }
                     }}
                     className={`relative px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
-                      isActive
+                      isActive || isRouteActive
                         ? "text-primary bg-primary/8"
                         : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
                     }`}
                   >
                     {link.label}
-                    {isActive && (
+                    {(isActive || isRouteActive) && (
                       <motion.div
                         layoutId="activeSection"
                         className="absolute bottom-1 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-primary"
@@ -153,18 +157,23 @@ const Header = () => {
                 transition={{ duration: 0.25, ease: "easeInOut" }}
               >
                 {navLinks.map((link, index) => {
-                  const isExternal = (link as any).external;
+                  const isRoute = (link as any).route;
                   return (
                     <motion.a
                       key={link.href}
                       href={link.href}
                       onClick={(e) => {
-                        if (isExternal) { setIsMenuOpen(false); return; }
+                        if (isRoute) {
+                          e.preventDefault();
+                          navigate(link.href);
+                          setIsMenuOpen(false);
+                          return;
+                        }
                         if (!isHome) { e.preventDefault(); handleNavClick(link); }
                         else setIsMenuOpen(false);
                       }}
                       className={`py-2.5 px-4 rounded-xl transition-colors font-medium text-sm cursor-pointer ${
-                        !isExternal && isHome && activeSection === link.id
+                        (isRoute && location.pathname === link.href) || (!isRoute && isHome && activeSection === link.id)
                           ? "text-primary bg-primary/10"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                       }`}
