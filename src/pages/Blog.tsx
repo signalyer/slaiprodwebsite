@@ -30,47 +30,47 @@ const B = ({ type, children }: { type: "pass" | "fail" | "warn"; children: React
 };
 
 const Callout = ({ children, color = "primary" }: { children: React.ReactNode; color?: string }) => (
-  <div className={`bg-${color}/[0.06] border-l-2 border-${color} rounded-r-lg p-4 my-5 text-[0.82rem] text-muted-foreground leading-relaxed`}>
+  <div className={`bg-${color}/[0.06] border-l-2 border-${color} rounded-r-lg p-3 my-3 text-[0.82rem] text-muted-foreground leading-relaxed`}>
     {children}
   </div>
 );
 
 const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
   <>
-    <h2 className="font-heading text-lg font-bold mt-8 mb-4 pb-2 border-b border-border">{title}</h2>
+    <h2 className="font-heading text-lg font-bold mt-5 mb-3 pb-1.5 border-b border-border">{title}</h2>
     {children}
   </>
 );
 
 const P = ({ children }: { children: React.ReactNode }) => (
-  <p className="text-[0.84rem] text-muted-foreground leading-[1.8] mb-4">{children}</p>
+  <p className="text-[0.84rem] text-muted-foreground leading-[1.7] mb-3">{children}</p>
 );
 
 /* ── Architecture Diagram (styled JSX, not ASCII) ── */
 const ArchDiagram = () => {
   const gateStyle = "bg-card border border-border rounded-lg px-3 py-2 text-center";
   return (
-    <div className="bg-card/50 border border-border rounded-xl p-6 my-5">
+    <div className="bg-card/50 border border-border rounded-xl p-4 my-3">
       {/* Submission */}
-      <div className="flex flex-col items-center gap-2 mb-4">
-        <div className="bg-primary/15 border border-primary/30 rounded-lg px-5 py-2.5 text-sm font-semibold text-primary">Application Submitted</div>
-        <ArrowDown className="w-4 h-4 text-muted-foreground" />
+      <div className="flex flex-col items-center gap-1.5 mb-3">
+        <div className="bg-primary/15 border border-primary/30 rounded-lg px-4 py-2 text-sm font-semibold text-primary">Application Submitted</div>
+        <ArrowDown className="w-3.5 h-3.5 text-muted-foreground" />
       </div>
       {/* Validation */}
-      <div className="flex flex-col items-center gap-2 mb-4">
-        <div className="bg-secondary border border-border rounded-lg px-5 py-3 text-center max-w-xs">
+      <div className="flex flex-col items-center gap-1.5 mb-3">
+        <div className="bg-secondary border border-border rounded-lg px-4 py-2 text-center max-w-xs">
           <div className="text-sm font-semibold text-foreground">Deterministic Validation</div>
-          <div className="text-xs text-muted-foreground mt-0.5">No AI &middot; Pure rules &middot; &lt;2ms</div>
+          <div className="text-xs text-muted-foreground">No AI &middot; Pure rules &middot; &lt;2ms</div>
         </div>
-        <div className="flex gap-12 text-xs text-muted-foreground">
-          <div className="flex flex-col items-center gap-1"><ArrowDown className="w-3 h-3" /><span className="text-emerald-400 font-semibold">Valid</span></div>
-          <div className="flex flex-col items-center gap-1"><ArrowDown className="w-3 h-3" /><span className="text-red-400 font-semibold">Invalid → Correction</span></div>
+        <div className="flex gap-10 text-xs text-muted-foreground">
+          <div className="flex flex-col items-center gap-0.5"><ArrowDown className="w-3 h-3" /><span className="text-emerald-400 font-semibold">Valid</span></div>
+          <div className="flex flex-col items-center gap-0.5"><ArrowDown className="w-3 h-3" /><span className="text-red-400 font-semibold">Invalid → Correction</span></div>
         </div>
       </div>
       {/* 5 Gates */}
-      <div className="flex flex-col items-center gap-2 mb-4">
-        <div className="text-xs text-muted-foreground font-medium uppercase tracking-wider">5 Specialist Agents (sequential, early exit)</div>
-        <div className="grid grid-cols-5 gap-2 w-full max-w-lg">
+      <div className="flex flex-col items-center gap-1.5 mb-3">
+        <div className="text-[0.65rem] text-muted-foreground font-medium uppercase tracking-wider">5 Specialist Agents (sequential, early exit)</div>
+        <div className="grid grid-cols-5 gap-1.5 w-full max-w-lg">
           {[
             { n: "1", label: "Status", color: "border-primary/40" },
             { n: "2", label: "Criteria", color: "border-primary/40" },
@@ -133,13 +133,13 @@ const Blog = () => {
       </Helmet>
       <CursorGlow />
       <Header />
-      <main className="pt-28 pb-20">
+      <main className="pt-24 pb-12">
         <div className="container mx-auto px-6">
 
           {/* Hero */}
-          <motion.div className="text-center mb-12" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
-            <span className="text-primary font-medium text-sm uppercase tracking-wider mb-4 block">Technical Deep Dive</span>
-            <h1 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-5 leading-tight max-w-3xl mx-auto">
+          <motion.div className="text-center mb-4" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5 }}>
+            <span className="text-primary font-medium text-sm uppercase tracking-wider mb-2 block">Technical Deep Dive</span>
+            <h1 className="font-heading text-2xl md:text-3xl lg:text-4xl font-bold mb-3 leading-tight max-w-3xl mx-auto">
               Agentic Implementation Journey:{" "}
               <span className="gradient-text">Building a Multi-Agent Compliance System</span>
             </h1>
@@ -149,18 +149,18 @@ const Blog = () => {
           </motion.div>
 
           {/* Metrics */}
-          <motion.div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3 mb-12 max-w-4xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}>
+          <motion.div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2 mb-4 max-w-4xl mx-auto" initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.5, delay: 0.15 }}>
             {metrics.map((m) => (
-              <div key={m.label} className="bg-card border border-border rounded-xl p-5 text-center hover:border-primary/40 transition-colors">
-                <div className={`font-heading text-2xl font-bold ${m.color}`}>{m.value}</div>
-                <div className="text-xs text-muted-foreground mt-1 font-medium">{m.label}</div>
-                <div className="text-[0.6rem] text-muted-foreground/60 mt-0.5">{m.sub}</div>
+              <div key={m.label} className="bg-card border border-border rounded-xl p-3 text-center hover:border-primary/40 transition-colors">
+                <div className={`font-heading text-xl font-bold ${m.color}`}>{m.value}</div>
+                <div className="text-[0.65rem] text-muted-foreground mt-0.5 font-medium">{m.label}</div>
+                <div className="text-[0.55rem] text-muted-foreground/60">{m.sub}</div>
               </div>
             ))}
           </motion.div>
 
           {/* Tabs */}
-          <div className="border-b border-border mb-8 flex flex-wrap max-w-4xl mx-auto">
+          <div className="border-b border-border mb-5 flex flex-wrap max-w-4xl mx-auto">
             {tabs.map((t) => (
               <button key={t.id} onClick={() => setActiveTab(t.id)}
                 className={`px-3 md:px-4 py-3 text-xs md:text-sm font-medium border-b-2 transition-all -mb-px ${
@@ -196,7 +196,7 @@ const Blog = () => {
                       </tbody>
                     </table>
                   </div>
-                  <ul className="text-[0.84rem] text-muted-foreground leading-[1.8] space-y-2 list-disc pl-5">
+                  <ul className="text-[0.84rem] text-muted-foreground leading-[1.8] space-y-1 list-disc pl-5">
                     <li><strong className="text-foreground">Specialist over generalist.</strong> Five focused agents. No attention dilution.</li>
                     <li><strong className="text-foreground">Sequential with early exit.</strong> FAIL ≥ 0.80 confidence skips remaining gates.</li>
                     <li><strong className="text-foreground">Safe defaults.</strong> Any failure → ESCALATE with confidence 0.0. Never auto-deny.</li>
@@ -210,7 +210,7 @@ const Blog = () => {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                 <Section title="Simulation as Answer Key">
                   <P>Instead of JSON test files, we built a complete deterministic implementation of all five gates in pure Python. Same tools, same data, same decision space. This serves as both the demo engine and the eval answer key.</P>
-                  <div className="overflow-x-auto mb-6">
+                  <div className="overflow-x-auto mb-4">
                     <table className="w-full text-sm border-collapse">
                       <thead><tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
                         <th className="py-2.5 px-3"></th><th className="py-2.5 px-3">JSON Test Files</th><th className="py-2.5 px-3">Deterministic Simulation</th>
@@ -225,7 +225,7 @@ const Blog = () => {
                 </Section>
 
                 <Section title="16 Eval Types, 219 Scenarios">
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
                     {[{v:"16",l:"Eval Types"},{v:"219",l:"Scenarios"},{v:"173",l:"Runs Completed"},{v:"6,500+",l:"Test Cases"}].map((m)=>(
                       <div key={m.l} className="bg-card border border-border rounded-xl p-4 text-center">
                         <div className="font-heading text-xl font-bold text-cyan-400">{m.v}</div>
@@ -241,7 +241,7 @@ const Blog = () => {
             {activeTab === "prompts" && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                 <Section title="The Journey: 70% → 97%+">
-                  <div className="space-y-4 mb-5">
+                  <div className="space-y-3 mb-3">
                     {[
                       {ver:"v1",color:"bg-red-500",title:"Baseline: 70-90% by gate",desc:"First prompts. Gate 3 at 70% — agent does arithmetic wrong."},
                       {ver:"v2",color:"bg-amber-500",title:"Pre-computation: 87-97%",desc:"Moved arithmetic into Python. +27 points on hardest gate."},
@@ -281,7 +281,7 @@ const Blog = () => {
                 </Section>
 
                 <Section title="5 Reusable Patterns">
-                  <ol className="text-[0.84rem] text-muted-foreground leading-[1.8] space-y-2 list-decimal pl-5 mb-6">
+                  <ol className="text-[0.84rem] text-muted-foreground leading-[1.8] space-y-1 list-decimal pl-5 mb-4">
                     <li><strong className="text-foreground">Pre-compute deterministic values.</strong> Never ask an LLM to calculate.</li>
                     <li><strong className="text-foreground">Decision tables over prose.</strong> Grids eliminate branching ambiguity.</li>
                     <li><strong className="text-foreground">Explicit scope boundaries.</strong> Tell the agent what NOT to do.</li>
@@ -305,7 +305,7 @@ const Blog = () => {
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
                 <Section title="Adversarial Testing">
                   <P>Agentic AI faces a specific threat: <strong className="text-foreground">indirect prompt injection via tool responses</strong>. The agent reads data from external systems via tool calls. That data is the attack surface.</P>
-                  <div className="overflow-x-auto mb-6">
+                  <div className="overflow-x-auto mb-4">
                     <table className="w-full text-sm border-collapse">
                       <thead><tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
                         <th className="py-2.5 px-3">Attack Category</th><th className="py-2.5 px-3">Risk</th><th className="py-2.5 px-3">Tests</th><th className="py-2.5 px-3">Status</th>
@@ -320,9 +320,9 @@ const Blog = () => {
                 </Section>
 
                 <Section title="Reasoning Quality Analysis">
-                  <div className="grid grid-cols-3 gap-3 mb-5">
+                  <div className="grid grid-cols-3 gap-2 mb-3">
                     {[{v:"6",l:"Hallucinations Flagged",c:"text-amber-400"},{v:"90%",l:"Faithfulness Rate",c:"text-emerald-400"},{v:"24",l:"Data Leakage Flagged",c:"text-red-400"}].map((m)=>(
-                      <div key={m.l} className="bg-card border border-border rounded-xl p-5 text-center">
+                      <div key={m.l} className="bg-card border border-border rounded-xl p-4 text-center">
                         <div className={`font-heading text-2xl font-bold ${m.c}`}>{m.v}</div>
                         <div className="text-[0.62rem] text-muted-foreground uppercase tracking-wider mt-1.5">{m.l}</div>
                       </div>
@@ -356,7 +356,7 @@ const Blog = () => {
 
                 <Section title="Model Behavior Debugger">
                   <P>AI providers update models without notice. The debugger detects behavioral changes before they reach users.</P>
-                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-5">
+                  <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-3">
                     {[{v:"Snapshot",l:"Baseline behavior"},{v:"Diff",l:"Compare versions"},{v:"Regression",l:"One-command PASS/FAIL"},{v:"Safety",l:"Cross-provider score"}].map((m)=>(
                       <div key={m.l} className="bg-card border border-border rounded-xl p-4 text-center">
                         <div className="font-heading text-sm font-bold text-foreground">{m.v}</div>
@@ -372,7 +372,7 @@ const Blog = () => {
 
             {activeTab === "summary" && (
               <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3 }}>
-                <div className="overflow-x-auto mb-8">
+                <div className="overflow-x-auto mb-5">
                   <table className="w-full text-sm border-collapse">
                     <thead><tr className="border-b border-border text-left text-xs text-muted-foreground uppercase tracking-wider">
                       <th className="py-2.5 px-3">Metric</th><th className="py-2.5 px-3">Value</th>
@@ -384,8 +384,8 @@ const Blog = () => {
                     </tbody>
                   </table>
                 </div>
-                <div className="bg-card border border-border rounded-xl p-8 text-center">
-                  <h3 className="font-heading text-xl font-bold gradient-text mb-3">The agent is 10% of the work. The eval infrastructure is 90%.</h3>
+                <div className="bg-card border border-border rounded-xl p-6 text-center">
+                  <h3 className="font-heading text-lg font-bold gradient-text mb-2">The agent is 10% of the work. The eval infrastructure is 90%.</h3>
                   <p className="text-sm text-muted-foreground leading-relaxed max-w-lg mx-auto">That ratio is correct for regulated industries — and probably correct for any high-stakes AI system.</p>
                 </div>
               </motion.div>
