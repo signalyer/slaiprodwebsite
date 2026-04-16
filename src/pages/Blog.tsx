@@ -75,12 +75,12 @@ const Blog = () => {
           </motion.div>
 
           {/* Tab bar */}
-          <div className="border-b border-border mb-6 overflow-x-auto flex gap-0 max-w-4xl mx-auto">
+          <div className="border-b border-border mb-6 flex flex-wrap gap-0 max-w-4xl mx-auto">
             {tabs.map((t) => (
               <button
                 key={t.id}
                 onClick={() => setActiveTab(t.id)}
-                className={`px-4 py-2.5 text-sm font-medium whitespace-nowrap border-b-2 transition-all -mb-px ${
+                className={`px-3 md:px-4 py-2.5 text-xs md:text-sm font-medium border-b-2 transition-all -mb-px ${
                   activeTab === t.id
                     ? "text-primary border-primary"
                     : "text-muted-foreground border-transparent hover:text-foreground"
