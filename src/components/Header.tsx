@@ -17,7 +17,7 @@ const Header = () => {
     { href: "#features", label: "Platform", id: "features" },
     { href: "#approach", label: "Methodology", id: "approach" },
     { href: "#agentic", label: "Agentic AI", id: "agentic" },
-    { href: "/blog", label: "Blog", id: "blog", route: true },
+    { href: "https://blogs.signallayer.ai/", label: "Blogs", id: "blogs", external: true },
   ];
 
   const handleNavClick = (link: typeof navLinks[0]) => {
@@ -78,14 +78,17 @@ const Header = () => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
+                const isExternal = (link as any).external;
                 const isRoute = (link as any).route;
                 const isRouteActive = isRoute && location.pathname === link.href;
-                const isActive = !isRoute && isHome && activeSection === link.id;
+                const isActive = !isRoute && !isExternal && isHome && activeSection === link.id;
                 return (
                   <a
                     key={link.href}
                     href={link.href}
+                    {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                     onClick={(e) => {
+                      if (isExternal) return;
                       if (isRoute) {
                         e.preventDefault();
                         navigate(link.href);
@@ -157,12 +160,15 @@ const Header = () => {
                 transition={{ duration: 0.25, ease: "easeInOut" }}
               >
                 {navLinks.map((link, index) => {
+                  const isExternal = (link as any).external;
                   const isRoute = (link as any).route;
                   return (
                     <motion.a
                       key={link.href}
                       href={link.href}
+                      {...(isExternal ? { target: "_blank", rel: "noopener noreferrer" } : {})}
                       onClick={(e) => {
+                        if (isExternal) { setIsMenuOpen(false); return; }
                         if (isRoute) {
                           e.preventDefault();
                           navigate(link.href);
@@ -173,7 +179,7 @@ const Header = () => {
                         else setIsMenuOpen(false);
                       }}
                       className={`py-2.5 px-4 rounded-xl transition-colors font-medium text-sm cursor-pointer ${
-                        (isRoute && location.pathname === link.href) || (!isRoute && isHome && activeSection === link.id)
+                        (isRoute && location.pathname === link.href) || (!isRoute && !isExternal && isHome && activeSection === link.id)
                           ? "text-primary bg-primary/10"
                           : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
                       }`}
