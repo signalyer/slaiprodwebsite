@@ -24,6 +24,8 @@ from google.analytics.data_v1beta import BetaAnalyticsDataClient
 from google.analytics.data_v1beta.types import (
     DateRange,
     Dimension,
+    Filter,
+    FilterExpression,
     Metric,
     OrderBy,
     RunReportRequest,
@@ -34,6 +36,19 @@ PROPERTY_ID = os.environ["GA4_PROPERTY_ID"]
 # Application Default Credentials — picks up Workload Identity Federation
 # creds from google-github-actions/auth when running in GitHub Actions.
 client = BetaAnalyticsDataClient()
+
+# Report only on signallayer.ai traffic (www + blogs + any other subdomain).
+# Filters out historical or stray data from other sites that once shared
+# the same measurement ID.
+HOSTNAME_FILTER = FilterExpression(
+    filter=Filter(
+        field_name="hostName",
+        string_filter=Filter.StringFilter(
+            match_type=Filter.StringFilter.MatchType.CONTAINS,
+            value="signallayer.ai",
+        ),
+    )
+)
 
 
 def run(dimensions, metrics, start, end, limit=10, order_by_metric=None):
@@ -46,6 +61,7 @@ def run(dimensions, metrics, start, end, limit=10, order_by_metric=None):
             dimensions=[Dimension(name=d) for d in dimensions],
             metrics=[Metric(name=m) for m in metrics],
             date_ranges=[DateRange(start_date=start.isoformat(), end_date=end.isoformat())],
+            dimension_filter=HOSTNAME_FILTER,
             limit=limit,
             order_bys=order,
         )
@@ -88,10 +104,10 @@ def build_report():
     prev_end = start - timedelta(days=1)
     prev_start = prev_end - timedelta(days=6)
 
-    # --- Overall totals with WoW comparison ---
+    # --- Overall totals with WoW comparison (also filtered to signallayer.ai) ---
     totals_metrics = ["activeUsers", "sessions", "screenPageViews", "averageSessionDuration", "eventCount"]
-    cur = run([], totals_metrics, start, end)
-    prev = run([], totals_metrics, prev_start, prev_end)
+    cur = run([], totals_metrics, start, end, limit=1)
+    prev = run([], totals_metrics, prev_start, prev_end, limit=1)
 
     def v(resp, i):
         return float(resp.rows[0].metric_values[i].value) if resp.rows else 0
@@ -155,7 +171,8 @@ def build_report():
     md = []
     md.append(f"# Weekly Analytics Report — signallayer.ai\n")
     md.append(f"**Period:** {start.isoformat()} → {end.isoformat()}  ")
-    md.append(f"**vs previous 7 days:** {prev_start.isoformat()} → {prev_end.isoformat()}\n")
+    md.append(f"**vs previous 7 days:** {prev_start.isoformat()} → {prev_end.isoformat()}  ")
+    md.append(f"_Scope: hostnames matching `signallayer.ai`_\n")
 
     md.append("## Headline metrics (with week-over-week)\n")
     md.append(md_table(["Metric", "This week", "Last week", "Change"], totals_rows))
