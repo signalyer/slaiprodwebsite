@@ -5,14 +5,17 @@ formats a markdown report with WoW comparisons, and writes it to
 reports/weekly-YYYY-MM-DD.md. The GitHub Actions workflow then
 creates an issue with that markdown body (which emails watchers).
 
-Required env vars:
-  GA4_PROPERTY_ID            — numeric property ID (e.g. "123456789")
-  GA4_SERVICE_ACCOUNT_JSON   — full service account key JSON as a string
-  GITHUB_OUTPUT              — set automatically by GitHub Actions
+Authentication: uses Application Default Credentials. In GitHub Actions,
+google-github-actions/auth@v2 populates these via Workload Identity
+Federation — no service account key needed.
 
-Runs locally too — set the env vars and run: python scripts/ga-weekly-report.py
+Required env vars:
+  GA4_PROPERTY_ID   — numeric property ID (e.g. "123456789")
+  GITHUB_OUTPUT     — set automatically by GitHub Actions
+
+Runs locally too — run `gcloud auth application-default login` first,
+then `GA4_PROPERTY_ID=... python scripts/ga-weekly-report.py`.
 """
-import json
 import os
 from datetime import date, timedelta
 from pathlib import Path
@@ -25,13 +28,12 @@ from google.analytics.data_v1beta.types import (
     OrderBy,
     RunReportRequest,
 )
-from google.oauth2 import service_account
 
 PROPERTY_ID = os.environ["GA4_PROPERTY_ID"]
-SA_INFO = json.loads(os.environ["GA4_SERVICE_ACCOUNT_JSON"])
 
-credentials = service_account.Credentials.from_service_account_info(SA_INFO)
-client = BetaAnalyticsDataClient(credentials=credentials)
+# Application Default Credentials — picks up Workload Identity Federation
+# creds from google-github-actions/auth when running in GitHub Actions.
+client = BetaAnalyticsDataClient()
 
 
 def run(dimensions, metrics, start, end, limit=10, order_by_metric=None):
