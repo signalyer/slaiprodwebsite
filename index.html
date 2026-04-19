@@ -7,7 +7,6 @@
     <title>Signal Layer | AI-Powered Intelligence Platform</title>
     <meta name="description" content="Transform noise into strategic clarity with Signal Layer's AI-powered intelligence platform for smarter decision-making." />
     <meta name="robots" content="noindex, nofollow, noarchive, nosnippet" />
-
     <meta name="author" content="Signal Layer" />
     <meta property="og:title" content="Signal Layer | AI-Powered Intelligence Platform" />
     <meta property="og:description" content="Transform noise into strategic clarity with Signal Layer's AI-powered intelligence platform for smarter decision-making." />
@@ -16,11 +15,43 @@
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:site" content="@SignalLayerAI" />
     <meta name="twitter:image" content="/og-image.jpg" />
-
     <!-- Fonts: Syne (headings) + DM Sans (body) -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;1,9..40,400&display=swap" rel="stylesheet" />
+
+    <!-- GA4 + Consent Mode v2 -->
+    <!-- Consent defaults MUST load before gtag.js -->
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('consent', 'default', {
+        'ad_storage': 'denied',
+        'ad_user_data': 'denied',
+        'ad_personalization': 'denied',
+        'analytics_storage': 'denied',
+        'functionality_storage': 'granted',
+        'security_storage': 'granted',
+        'wait_for_update': 500
+      });
+    </script>
+    <!-- Cookiebot consent banner — TODO: replace YOUR-CBID-HERE once Cookiebot account is created -->
+    <script
+      id="Cookiebot"
+      src="https://consent.cookiebot.com/uc.js"
+      data-cbid="YOUR-CBID-HERE"
+      data-blockingmode="auto"
+      type="text/javascript">
+    </script>
+    <!-- GA4 tag -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1LK1QQX5GN"></script>
+    <script>
+      gtag('js', new Date());
+      gtag('config', 'G-1LK1QQX5GN', {
+        'anonymize_ip': true,
+        'cookie_flags': 'SameSite=None;Secure'
+      });
+    </script>
   </head>
   <body>
     <div id="root"></div>
