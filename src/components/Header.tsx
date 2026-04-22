@@ -1,26 +1,47 @@
 import { Button } from "@/components/ui/button";
-import { Menu, X } from "lucide-react";
+import { Menu, X, ChevronDown } from "lucide-react";
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useLocation, useNavigate } from "react-router-dom";
 import useActiveSection from "@/hooks/useActiveSection";
 
+type NavChild = { href: string; label: string; external?: boolean };
+type NavLink = {
+  href: string;
+  label: string;
+  id: string;
+  external?: boolean;
+  route?: boolean;
+  children?: NavChild[];
+};
+
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState<string | null>(null);
+  const [mobileOpenSub, setMobileOpenSub] = useState<string | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const activeSection = useActiveSection(["about", "features", "approach", "agentic", "contact"]);
   const isHome = location.pathname === "/";
 
-  const navLinks = [
+  const navLinks: NavLink[] = [
     { href: "#about", label: "About", id: "about" },
     { href: "#features", label: "Platform", id: "features" },
+    {
+      href: "#products",
+      label: "Products",
+      id: "products",
+      children: [
+        { href: "https://lens.signallayer.ai/lens", label: "Lens", external: true },
+        { href: "https://labs.signallayer.ai/", label: "Agentics", external: true },
+      ],
+    },
     { href: "#approach", label: "Methodology", id: "approach" },
     { href: "#agentic", label: "Agentic AI", id: "agentic" },
     { href: "https://blogs.signallayer.ai/", label: "Blogs", id: "blogs", external: true },
   ];
 
-  const handleNavClick = (link: typeof navLinks[0]) => {
+  const handleNavClick = (link: NavLink) => {
     if (!isHome) {
       navigate("/" + link.href);
     }
@@ -78,10 +99,60 @@ const Header = () => {
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-1">
               {navLinks.map((link) => {
-                const isExternal = (link as any).external;
-                const isRoute = (link as any).route;
+                const isExternal = link.external;
+                const isRoute = link.route;
+                const hasChildren = !!link.children?.length;
                 const isRouteActive = isRoute && location.pathname === link.href;
-                const isActive = !isRoute && !isExternal && isHome && activeSection === link.id;
+                const isActive = !isRoute && !isExternal && !hasChildren && isHome && activeSection === link.id;
+
+                if (hasChildren) {
+                  const isOpen = openDropdown === link.id;
+                  return (
+                    <div
+                      key={link.href}
+                      className="relative"
+                      onMouseEnter={() => setOpenDropdown(link.id)}
+                      onMouseLeave={() => setOpenDropdown(null)}
+                    >
+                      <button
+                        type="button"
+                        className={`relative inline-flex items-center gap-1 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 cursor-pointer ${
+                          isOpen
+                            ? "text-foreground bg-secondary/60"
+                            : "text-muted-foreground hover:text-foreground hover:bg-secondary/60"
+                        }`}
+                      >
+                        {link.label}
+                        <ChevronDown size={14} className={`transition-transform duration-200 ${isOpen ? "rotate-180" : ""}`} />
+                      </button>
+                      <AnimatePresence>
+                        {isOpen && (
+                          <motion.div
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            exit={{ opacity: 0, y: 6 }}
+                            transition={{ duration: 0.15 }}
+                            className="absolute left-0 top-full pt-2 min-w-[180px]"
+                          >
+                            <div className="rounded-xl border border-border/40 bg-background/95 backdrop-blur-xl shadow-lg p-1">
+                              {link.children!.map((child) => (
+                                <a
+                                  key={child.href}
+                                  href={child.href}
+                                  {...(child.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                  className="block px-3 py-2 rounded-lg text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/60 transition-colors"
+                                >
+                                  {child.label}
+                                </a>
+                              ))}
+                            </div>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  );
+                }
+
                 return (
                   <a
                     key={link.href}
@@ -160,8 +231,58 @@ const Header = () => {
                 transition={{ duration: 0.25, ease: "easeInOut" }}
               >
                 {navLinks.map((link, index) => {
-                  const isExternal = (link as any).external;
-                  const isRoute = (link as any).route;
+                  const isExternal = link.external;
+                  const isRoute = link.route;
+                  const hasChildren = !!link.children?.length;
+
+                  if (hasChildren) {
+                    const isSubOpen = mobileOpenSub === link.id;
+                    return (
+                      <motion.div
+                        key={link.href}
+                        initial={{ opacity: 0, x: -16 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        transition={{ duration: 0.25, delay: index * 0.04 }}
+                      >
+                        <button
+                          type="button"
+                          onClick={() => setMobileOpenSub(isSubOpen ? null : link.id)}
+                          className={`w-full flex items-center justify-between py-2.5 px-4 rounded-xl transition-colors font-medium text-sm cursor-pointer ${
+                            isSubOpen
+                              ? "text-foreground bg-secondary/50"
+                              : "text-muted-foreground hover:text-foreground hover:bg-secondary/50"
+                          }`}
+                        >
+                          <span>{link.label}</span>
+                          <ChevronDown size={16} className={`transition-transform duration-200 ${isSubOpen ? "rotate-180" : ""}`} />
+                        </button>
+                        <AnimatePresence>
+                          {isSubOpen && (
+                            <motion.div
+                              initial={{ opacity: 0, height: 0 }}
+                              animate={{ opacity: 1, height: "auto" }}
+                              exit={{ opacity: 0, height: 0 }}
+                              transition={{ duration: 0.2 }}
+                              className="overflow-hidden pl-4"
+                            >
+                              {link.children!.map((child) => (
+                                <a
+                                  key={child.href}
+                                  href={child.href}
+                                  {...(child.external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
+                                  onClick={() => setIsMenuOpen(false)}
+                                  className="block py-2 px-4 rounded-xl text-sm font-medium text-muted-foreground hover:text-foreground hover:bg-secondary/50 transition-colors"
+                                >
+                                  {child.label}
+                                </a>
+                              ))}
+                            </motion.div>
+                          )}
+                        </AnimatePresence>
+                      </motion.div>
+                    );
+                  }
+
                   return (
                     <motion.a
                       key={link.href}
