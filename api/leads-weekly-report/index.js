@@ -135,7 +135,20 @@ module.exports = async function (context, req) {
     const presented = match ? match[1].trim() : '';
     const expected = process.env.WEEKLY_REPORT_SECRET || '';
     if (!expected || !presented || !safeEqual(presented, expected)) {
-      jsonResponse(context, 401, { error: 'Unauthorized' });
+      // TEMP DEBUG — remove after diagnosing the propagation issue
+      jsonResponse(context, 401, {
+        error: 'Unauthorized',
+        debug: {
+          presentedLen: presented.length,
+          presentedFirst4: presented.slice(0, 4),
+          presentedLast4: presented.slice(-4),
+          expectedLen: expected.length,
+          expectedFirst4: expected.slice(0, 4),
+          expectedLast4: expected.slice(-4),
+          authHeaderPresent: !!authHeader,
+          authHeaderFirst10: authHeader.slice(0, 10),
+        },
+      });
       return;
     }
 
