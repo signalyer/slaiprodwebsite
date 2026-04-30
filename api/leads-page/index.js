@@ -81,13 +81,18 @@ module.exports = async function (context, req) {
       : `<div class="card"><div class="empty">No verified leads yet.</div></div>`;
 
     const html = htmlPage({
-      title: 'Signal Layer · Admin · Leads',
+      title: 'Signal Layer | Admin · Leads',
       body: `
 <div class="wrap">
   <div class="topbar">
     <div>
-      <div class="brand">Signal<span class="layer">Layer</span></div>
-      <div class="eyebrow">Admin · Leads</div>
+      <div class="sl-lockup">
+        <div class="sl-mark"><span>SL</span></div>
+        <div>
+          <div class="sl-wordmark">Signal<span class="gradient-text">Layer</span></div>
+          <div class="sl-tagline">AI Platform · Admin · Leads</div>
+        </div>
+      </div>
     </div>
     <a href="/api/leads/logout">Sign out →</a>
   </div>
@@ -106,7 +111,7 @@ module.exports = async function (context, req) {
   } catch (err) {
     context.log.error('admin dashboard failed:', err.message, err.stack);
     htmlResponse(context, 500, htmlPage({
-      title: 'Signal Layer · Admin · Error',
+      title: 'Signal Layer | Admin · Error',
       body: `<div class="center"><div class="card card-w"><h1>Server error</h1><p class="subtitle">${escapeHtml(err.message)}</p></div></div>`,
     }));
   }

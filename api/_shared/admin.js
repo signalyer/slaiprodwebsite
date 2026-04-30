@@ -172,14 +172,20 @@ function safeEqual(a, b) {
 
 // ── HTML page shell ────────────────────────────────────────────────────────
 
-function htmlPage({ title, body }) {
+function htmlPage({ title, body, description }) {
+  const desc = description || 'Signal Layer admin — restricted access.';
   return `<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<meta name="googlebot" content="noindex, nofollow">
+<meta name="description" content="${desc}">
 <title>${title}</title>
+<link rel="icon" type="image/png" href="/favicon.png">
+<link rel="icon" href="/favicon.ico" sizes="any">
+<link rel="apple-touch-icon" href="/favicon.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -206,6 +212,58 @@ function htmlPage({ title, body }) {
   }
   .wrap { max-width: 1100px; margin: 0 auto; padding: 32px 24px; }
   .center { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 24px; }
+
+  /* Brand-kit-matching Logo lockup */
+  .sl-lockup { display: inline-flex; align-items: center; gap: 12px; }
+  .sl-mark {
+    position: relative;
+    width: 36px; height: 36px; flex-shrink: 0;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    display: flex; align-items: center; justify-content: center;
+    overflow: hidden;
+  }
+  .sl-mark::before {
+    content: '';
+    position: absolute; inset: 0;
+    background-image:
+      linear-gradient(0deg, rgba(255,255,255,0.3) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.3) 1px, transparent 1px);
+    background-size: 8px 8px;
+    opacity: 0.2;
+  }
+  .sl-mark span {
+    position: relative;
+    color: var(--bg);
+    font-family: 'Syne', sans-serif;
+    font-weight: 700;
+    font-size: 14px;
+    letter-spacing: -0.02em;
+  }
+  .sl-wordmark {
+    font-family: 'Syne', sans-serif;
+    font-size: 18px;
+    font-weight: 700;
+    color: var(--text);
+    letter-spacing: -0.01em;
+    line-height: 1;
+  }
+  .sl-wordmark .gradient-text {
+    background: linear-gradient(135deg, var(--primary), var(--accent));
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+  .sl-tagline {
+    font-family: 'DM Sans', sans-serif;
+    font-size: 9px;
+    color: var(--subtle);
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    margin-top: 4px;
+  }
+
+  /* Legacy brand class kept for any existing usage */
   .brand { font-family: 'Syne', sans-serif; font-size: 22px; font-weight: 600; margin-bottom: 4px; }
   .brand .layer { color: var(--primary); }
   .eyebrow { font-size: 11px; color: var(--subtle); letter-spacing: 0.15em; text-transform: uppercase; margin-bottom: 24px; font-family: 'IBM Plex Mono', monospace; }

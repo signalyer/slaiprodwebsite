@@ -34,12 +34,17 @@ function loginPage({ error }) {
     ? `<div class="error">${escapeHtml(error)}</div>`
     : '';
   return htmlPage({
-    title: 'Signal Layer · Admin · Sign in',
+    title: 'Signal Layer | Admin · Sign in',
     body: `
 <div class="center">
   <div class="card card-w">
-    <div class="brand">Signal<span class="layer">Layer</span></div>
-    <div class="eyebrow">Admin</div>
+    <div class="sl-lockup" style="margin-bottom:8px;">
+      <div class="sl-mark"><span>SL</span></div>
+      <div>
+        <div class="sl-wordmark">Signal<span class="gradient-text">Layer</span></div>
+        <div class="sl-tagline">AI Platform · Admin</div>
+      </div>
+    </div>
     <h1>Sign in</h1>
     <p class="subtitle">Restricted access · 10-minute session</p>
     ${errorHtml}
