@@ -48,7 +48,6 @@ function checkRateLimit(key: string): { allowed: boolean; remaining: number; res
 const ALLOWED_ORIGINS = [
   "https://signallayer.ai",
   "https://www.signallayer.ai",
-  "https://signallayerai.lovable.app",
 ];
 
 function getCorsHeaders(req: Request) {

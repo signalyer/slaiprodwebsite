@@ -183,9 +183,9 @@ function htmlPage({ title, body, description }) {
 <meta name="googlebot" content="noindex, nofollow">
 <meta name="description" content="${desc}">
 <title>${title}</title>
-<link rel="icon" type="image/png" href="/favicon.png">
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="apple-touch-icon" href="/favicon.png">
+<link rel="icon" type="image/png" href="/favicon.png?v=sl1">
+<link rel="icon" href="/favicon.ico?v=sl1" sizes="any">
+<link rel="apple-touch-icon" href="/favicon.png?v=sl1">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Syne:wght@500;600;700&family=DM+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">

@@ -15,7 +15,7 @@ const AgenticAI = () => {
         <meta name="description" content="Signal Layer helps businesses design and implement agentic AI — intelligent agents that capture signals, reason with your domain expertise, and take action with humans in the loop." />
         <meta property="og:title" content="Agentic AI Solutions | Signal Layer" />
         <meta property="og:description" content="We help organizations build intelligent agents that transform decision-making from passive dashboards to autonomous action." />
-        <link rel="canonical" href="https://signallayerai.lovable.app/agentic-ai" />
+        <link rel="canonical" href="https://www.signallayer.ai/agentic-ai" />
       </Helmet>
       <CursorGlow />
       <Header />
