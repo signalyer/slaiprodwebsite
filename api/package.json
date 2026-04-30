@@ -1,5 +1,8 @@
 {
   "name": "signallayer-api",
   "version": "1.0.0",
-  "private": true
+  "private": true,
+  "dependencies": {
+    "@azure/data-tables": "^13.2.2"
+  }
 }

@@ -1,0 +1,31 @@
+name: Admin Weekly Leads Report
+
+on:
+  schedule:
+    # Mondays at 09:00 UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: {}
+
+jobs:
+  send:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger weekly report
+        env:
+          SECRET: ${{ secrets.WEEKLY_REPORT_SECRET }}
+        run: |
+          set -e
+          if [ -z "$SECRET" ]; then
+            echo "WEEKLY_REPORT_SECRET not set"
+            exit 1
+          fi
+          response=$(curl -sS -w "\n%{http_code}" -X POST \
+            "https://signallayer.ai/api/admin/weekly-report" \
+            -H "Authorization: Bearer $SECRET")
+          body=$(echo "$response" | head -n -1)
+          status=$(echo "$response" | tail -n 1)
+          echo "Status: $status"
+          echo "Body: $body"
+          if [ "$status" != "200" ]; then
+            exit 1
+          fi

@@ -13,5 +13,10 @@
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Permissions-Policy": "geolocation=(), camera=(), microphone=()"
-  }
+  },
+  "routes": [
+    { "route": "/admin", "rewrite": "/api/admin" },
+    { "route": "/admin/login", "rewrite": "/api/admin/login" },
+    { "route": "/admin/logout", "rewrite": "/api/admin/logout" }
+  ]
 }
