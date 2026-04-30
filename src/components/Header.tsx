@@ -34,6 +34,7 @@ const Header = () => {
       children: [
         { href: "https://lens.signallayer.ai/lens", label: "Lens", external: true },
         { href: "https://labs.signallayer.ai/", label: "Agentics", external: true },
+        { href: "https://airoiframework.signallayer.ai/", label: "AI ROI Framework", external: true },
       ],
     },
     { href: "#approach", label: "Methodology", id: "approach" },
