@@ -21,7 +21,7 @@ jobs:
           fi
           response=$(curl -sS -w "\n%{http_code}" -X POST \
             "https://admin.signallayer.ai/api/leads/weekly-report" \
-            -H "Authorization: Bearer $SECRET")
+            -H "X-Webhook-Secret: $SECRET")
           body=$(echo "$response" | head -n -1)
           status=$(echo "$response" | tail -n 1)
           echo "Status: $status"

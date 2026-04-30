@@ -129,26 +129,13 @@ function jsonResponse(context, status, body) {
 
 module.exports = async function (context, req) {
   try {
-    // Bearer token auth
-    const authHeader = req.headers?.authorization || '';
-    const match = authHeader.match(/^Bearer\s+(.+)$/);
-    const presented = match ? match[1].trim() : '';
+    // Custom-header auth — SWA's edge rewrites the Authorization header for
+    // /api/* routes (it's reserved for SWA's own user auth flow), so we use
+    // x-webhook-secret instead.
+    const presented = (req.headers?.['x-webhook-secret'] || '').trim();
     const expected = process.env.WEEKLY_REPORT_SECRET || '';
     if (!expected || !presented || !safeEqual(presented, expected)) {
-      // TEMP DEBUG — remove after diagnosing the propagation issue
-      jsonResponse(context, 401, {
-        error: 'Unauthorized',
-        debug: {
-          presentedLen: presented.length,
-          presentedFirst4: presented.slice(0, 4),
-          presentedLast4: presented.slice(-4),
-          expectedLen: expected.length,
-          expectedFirst4: expected.slice(0, 4),
-          expectedLast4: expected.slice(-4),
-          authHeaderPresent: !!authHeader,
-          authHeaderFirst10: authHeader.slice(0, 10),
-        },
-      });
+      jsonResponse(context, 401, { error: 'Unauthorized' });
       return;
     }
 
