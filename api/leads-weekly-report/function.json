@@ -5,8 +5,8 @@
       "type": "httpTrigger",
       "direction": "in",
       "name": "req",
-      "methods": ["get"],
-      "route": "admin"
+      "methods": ["post"],
+      "route": "leads/weekly-report"
     },
     {
       "type": "http",

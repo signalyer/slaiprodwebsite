@@ -13,5 +13,10 @@
     "X-Content-Type-Options": "nosniff",
     "X-Frame-Options": "DENY",
     "Permissions-Policy": "geolocation=(), camera=(), microphone=()"
-  }
+  },
+  "routes": [
+    { "route": "/dashboard", "rewrite": "/api/leads" },
+    { "route": "/dashboard/login", "rewrite": "/api/leads/login" },
+    { "route": "/dashboard/logout", "rewrite": "/api/leads/logout" }
+  ]
 }

@@ -1,7 +1,7 @@
 /**
- * GET /api/admin — leads dashboard.
+ * GET /api/leads — leads dashboard.
  * Renders an HTML table of all verified leads. Requires a valid session
- * cookie (set by /api/admin/login). 10-minute server-side TTL.
+ * cookie (set by /api/leads/login). 10-minute server-side TTL.
  */
 
 const {
@@ -45,7 +45,7 @@ module.exports = async function (context, req) {
     if (!valid) {
       context.res = {
         status: 302,
-        headers: { Location: '/api/admin/login' },
+        headers: { Location: '/api/leads/login' },
         body: '',
       };
       return;
@@ -89,7 +89,7 @@ module.exports = async function (context, req) {
       <div class="brand">Signal<span class="layer">Layer</span></div>
       <div class="eyebrow">Admin · Leads</div>
     </div>
-    <a href="/api/admin/logout">Sign out →</a>
+    <a href="/api/leads/logout">Sign out →</a>
   </div>
   <h1>AI ROI Framework — registered leads</h1>
   <p class="subtitle">Captured on the verification gate at airoiframework.signallayer.ai. Sorted by most recent first.</p>

@@ -1,5 +1,5 @@
 /**
- * /api/admin/logout — clear session, redirect to login.
+ * /api/leads/logout — clear session, redirect to login.
  */
 
 const {
@@ -14,7 +14,7 @@ module.exports = async function (context, req) {
   context.res = {
     status: 302,
     headers: {
-      Location: '/api/admin/login',
+      Location: '/api/leads/login',
       'Set-Cookie': clearSessionCookie(),
       'Cache-Control': 'no-store',
     },

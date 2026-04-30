@@ -20,7 +20,7 @@ jobs:
             exit 1
           fi
           response=$(curl -sS -w "\n%{http_code}" -X POST \
-            "https://admin.signallayer.ai/api/admin/weekly-report" \
+            "https://admin.signallayer.ai/api/leads/weekly-report" \
             -H "Authorization: Bearer $SECRET")
           body=$(echo "$response" | head -n -1)
           status=$(echo "$response" | tail -n 1)

@@ -1,6 +1,6 @@
 /**
- * GET  /api/admin/login — show login form.
- * POST /api/admin/login — check creds, set session cookie, redirect.
+ * GET  /api/leads/login — show login form.
+ * POST /api/leads/login — check creds, set session cookie, redirect.
  *
  * After 3 failed attempts the account is locked. Unlock by clearing
  * the row from the adminLockout table:
@@ -43,7 +43,7 @@ function loginPage({ error }) {
     <h1>Sign in</h1>
     <p class="subtitle">Restricted access · 10-minute session</p>
     ${errorHtml}
-    <form method="POST" action="/api/admin/login" autocomplete="off">
+    <form method="POST" action="/api/leads/login" autocomplete="off">
       <div class="field">
         <label for="username">Username</label>
         <input id="username" name="username" type="text" required autocomplete="username" autofocus>
@@ -143,7 +143,7 @@ module.exports = async function (context, req) {
     context.res = {
       status: 302,
       headers: {
-        Location: '/api/admin',
+        Location: '/api/leads',
         'Set-Cookie': cookie,
         'Cache-Control': 'no-store',
       },

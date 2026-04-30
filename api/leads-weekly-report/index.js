@@ -1,5 +1,5 @@
 /**
- * POST /api/admin/weekly-report — sends a weekly digest of new leads.
+ * POST /api/leads/weekly-report — sends a weekly digest of new leads.
  *
  * Triggered by GitHub Actions cron with header:
  *   Authorization: Bearer <WEEKLY_REPORT_SECRET>
@@ -111,7 +111,7 @@ function reportHtml({ totalCount, newLeads, weekStart, weekEnd }) {
       </p>
       ${tableSection}
       <p style="color:#6b7590;font-size:12px;margin:24px 0 0 0;">
-        Full list: <a href="https://admin.signallayer.ai/admin" style="color:#1eb8a4;text-decoration:none;">admin.signallayer.ai/admin</a>
+        Full list: <a href="https://admin.signallayer.ai/dashboard" style="color:#1eb8a4;text-decoration:none;">admin.signallayer.ai/dashboard</a>
       </p>
     </div>
   </div>
